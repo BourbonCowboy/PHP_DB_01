@@ -16,6 +16,27 @@ if (isset($_POST['send'])) {
     echo '<pre>';
     print_r($_POST);
     echo '</pre><hr><hr>';
+
+    // Insere contato no banco de dados
+    $sql = <<<SQL
+
+INSERT INTO contacts (
+    contact_name, 
+    contact_email, 
+    contact_subject, 
+    contact_message
+) VALUES (
+    '{$_POST["name"]}', 
+    '{$_POST["email"]}',
+    '{$_POST["subject"]}',
+    '{$_POST["message"]}'
+);
+
+SQL;
+
+    // exit($sql); --> Debug
+
+    $conn->query($sql);
 }
 
 /*********************************************

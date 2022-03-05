@@ -48,7 +48,7 @@ CREATE TABLE authors (
     author_photo VARCHAR(255) NOT NULL,
     author_birth DATE NOT NULL,
     author_profile TEXT NOT NULL,
-    author_status ENUM('on', 'off', 'deleted')
+    author_status ENUM('on', 'off', 'deleted') NOT NULL DEFAULT 'on'
 );
 
 -- Cria tabela para armazenar os rtigos do aplicativo.
