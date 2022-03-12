@@ -14,17 +14,18 @@ $name = $email = $subject = $message = $feedback = '';
 $show_form = true;
 
 // Detecta se o formulário foi enviado...
-if (isset($_POST['send'])) {
+if (isset($_POST['send'])) :
 
     // Se foi enviado, processa o formulário...
 
-    // Verifica se todos os campos form preenchidos
-
+    // Obtém os valores dos campos, sanitiza e armazena nas variáveis.
+    // Atenção! A função "sanitize()" está em "/_config.php".
     $name = sanitize('name', 'string');
     $email = sanitize('email', 'email');
     $subject = sanitize('subject', 'string');
     $message = sanitize('message', 'string');
 
+    // Verifica se todos os campos form preenchidos
     if ($name === '' or $email === '' or $subject === '' or $message === '') :
         $feedback = '<h3 style="color:red">Erro: por favor, preencha todos os campos!</h3>';
     else :
@@ -56,8 +57,17 @@ SQL;
         // Salva contato no banco de dados.
         $conn->query($sql);
 
+        // Obtém somente primeiro nome do rementente.
+        $first_name = explode(" ", $name)[0];
+
         // Cria mensagem de confirmação.
-        $feedback = '<h3 style="color:green">Oba! Seu contato foi enviado!</h3>';
+        $feedback = <<<OUT
+        
+<h3>Olá {$first_name}!</h3>
+<p>Seu contato foi enviado com sucesso.</p>
+<p><em>Obrigado...</em></p>
+
+OUT;
 
         // Oculto o formulário.
         $show_form = false;
@@ -85,7 +95,7 @@ MSG;
         @mail($to, $sj, $msg);
 
     endif;
-}
+endif; // if (isset($_POST['send'])) 
 
 /*********************************************
  * Seu código PHP desta página termina aqui! *
@@ -107,7 +117,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/_header.php";
 <article>
 
     <h2>Faça contato</h2>
-    <p>Preencha todos os campos do formulário abaixo para entrar em contato com a equipe do <strong><?php echo $site_name ?></strong>.</p>
+    <p>Preencha todos os campos do formulário abaixo para entrar em contato com a equipe do <strong><?php echo $site['name'] ?></strong>.</p>
 
     <?php echo $feedback; ?>
 
